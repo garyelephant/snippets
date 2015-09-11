@@ -1,0 +1,2 @@
+SQLAlchemy>=1.0.4
+PyMySQL>=0.6.6
