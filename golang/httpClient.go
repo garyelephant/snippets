@@ -94,4 +94,3 @@ func doPut(url string) {
 		fmt.Println(contents)
 	}
 }
-Contact GitHub API Training Shop Blog About
