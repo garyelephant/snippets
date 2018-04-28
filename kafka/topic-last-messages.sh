@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# do this first
+# cd to kafka/bin, export PATH=$PATH:$(pwd)
+
 if [ -z "$1" ]
   then
     echo "Missing first argument, zookeeper host port like: my-zookeeper-hostname:2181"
