@@ -1,6 +1,10 @@
 # coding:utf-8
 """
 Utils to get and set kafka topic consumer group offsets.
+
+Please install dependencies first: 
+    pip install -r zk_offset_manage_requirements.txt
+    
 """
 
 import sys
