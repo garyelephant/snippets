@@ -27,6 +27,19 @@ key2:value2
 key3:value3
 ```
 
+查看[kafka] offset storage的consumer group：
+
+```
+./kafka-consumer-groups.sh --bootstrap-server 172.17.31.231:9092,172.17.31.232:9092 --group accumulator.consumer --describe
+```
+
+
+从文件produce到kafka
+
+```
+kafka-console-producer.sh --broker-list localhost:9092 --topic my_topic < my_file.txt
+```
+
 ---
 
 ### References:
