@@ -96,3 +96,15 @@ MetricsRecordImpl{timestamp=1528439762366, name=MetricsSystem, description=Metri
 MetricsRecordImpl{timestamp=1528439763366, name=MyMetrics, description=MyMetrics, tags=[MetricsTag{info=MsInfo{name=Context, description=Metrics context}, value=MyContext}, MetricsTag{info=MsInfo{name=Hostname, description=Local hostname}, value=gaoyingjuMacBook-Pro.local}], metrics=[MetricGaugeInt{info=MetricsInfoImpl{name=MyMetric, description=My metric description}, value=42}]}
 MetricsRecordImpl{timestamp=1528439763366, name=MyMetrics, description=MyMetrics, tags=[MetricsTag{info=MsInfo{name=Context, description=Metrics context}, value=MyContext}, MetricsTag{info=MsInfo{name=Hostname, description=Local hostname}, value=gaoyingjuMacBook-Pro.local}], metrics=[MetricGaugeInt{info=MetricsInfoImpl{name=MyMetric, description=My metric description}, value=42}]}
 ```
+
+---
+
+## References
+
+http://johnjianfang.blogspot.com/2014/09/hadoop-metrics-two-framework-part-ii.html
+https://blog.csdn.net/cjuexuan/article/details/51834454
+https://manuzhang.github.io/2017/07/10/hadoop-metrics2.html
+http://blog.cloudera.com/blog/2012/10/what-is-hadoop-metrics2/
+https://hadoop.apache.org/docs/r3.0.1/api/org/apache/hadoop/metrics2/package-summary.html
+https://wiki.apache.org/hadoop/HADOOP-6728-MetricsV2
+https://github.com/cerndb/hadoop-metrics-http-sink
