@@ -1,3 +1,5 @@
+## https://misc.flogisoft.com/bash/tip_colors_and_formatting
+
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
