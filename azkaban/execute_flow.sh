@@ -1,7 +1,7 @@
 #!/bin/bash
 
-azkaban_url="http://<please_set_azkaban_url>/executor"
-
+azkaban_url="http://<please_set_azkaban_host_port>/executor"
+session_id=<please_set_user_session_id>
 project=<please_set_azkaban_project_name>
 
 if [ $# != 4 ]; then
@@ -24,7 +24,7 @@ while [ $t -lt $end_day ] ; do
     t_plus_one_day_str=$(date -d @$t_plus_one_day +%Y%m%d)
 
     echo "[INFO] going to execute flow: project:mercuryv2_union_settlement_sync, flow: $flow, day range: [$t_str, $t_plus_one_day_str), day range unix_timestamp: [$t, $t_plus_one_day)"
-    curl --get -d 'session.id=33a52bc8-1ef3-45ed-ae43-195887ea4697' -d 'ajax=executeFlow' -d 'project=mercuryv2_union_settlement_sync' -d "flow=$flow" -d "flowOverride[start_day]=$t" -d "flowOverride[end_day]=$t_plus_one_day" $azkaban_url
+    curl --get -d "session.id=$session_id" -d "ajax=executeFlow" -d "project=$project" -d "flow=$flow" -d "flowOverride[start_day]=$t" -d "flowOverride[end_day]=$t_plus_one_day" $azkaban_url
 
     if [ $? != 0 ]; then
         echo "[ERROR] encountered error, quit "
