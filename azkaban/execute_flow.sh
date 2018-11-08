@@ -1,8 +1,8 @@
 #!/bin/bash
 
-azkaban_url="http://172.17.11.199:8443/executor"
+azkaban_url="http://<please_set_azkaban_url>/executor"
 
-project=mercuryv2_union_settlement_sync
+project=<please_set_azkaban_project_name>
 
 if [ $# != 4 ]; then
     echo "please specify <flow_name> <start_day:20181001> <end_day:20181101> <sleep_seconds>"
