@@ -5,13 +5,13 @@
 ##
 
 azkaban_url="http://127.0.0.1:8443" # TODO: configure this
-azkaban_user="myuser"  # TODO: configure this
-azkaban_password="mypassword"  # TODO: configure this
+azkaban_user="myuser" # TODO: configure this
+azkaban_password="mypassword" # TODO: configure this
 
-project=myproject # TODO: configure this
+project=myproject  # TODO: configure this
 
-if [ $# != 4 ]; then
-    echo "please specify <flow_name> <start_day:20181001> <end_day:20181101> <sleep_seconds>"
+if [ $# != 5 ]; then
+    echo "please specify <flow_name> <start_day:20181001> <end_day:20181101> <interval:day,month> <sleep_seconds:30>"
     exit -1
 fi
 
@@ -34,7 +34,11 @@ echo "[INFO] azakban user: $azkaban_user, sessionid: $sessionid"
 flow=$1
 start_day_str=$2
 end_day_str=$3
-sleep_seconds=$4
+interval=$4
+sleep_seconds=$5
+time_format="%s"
+# time_format="%Y-%m-%d"
+
 
 start_day=$(date -d "$start_day_str" +%s)
 end_day=$(date -d "$end_day_str" +%s)
@@ -46,21 +50,29 @@ while [ $t -lt $end_day ] ; do
     t_str=$(date -d @$t +%Y-%m-%d)
     t_plus_one_day_str=$(date -d @$t_plus_one_day +%Y-%m-%d)
 
-    echo "[INFO] going to execute flow: project:$project, flow: $flow, day range: [$t_str, $t_plus_one_day_str), day range unix_timestamp: [$t, $t_plus_one_day)"
+    t_plus_one_month=$(date -d "${t_str} 1 months" +%s)
+    t_plus_one_month_str=$(date -d "${t_str} 1 months" +%Y-%m-%d)
 
-    arg_start_day=$t_str
-    arg_end_day=$t_plus_one_day_str
-    arg_conf_name="$flow.conf"
-    arg_app_name="$flow-$t_str-$t_plus_one_day_str"
+    arg_start_day=$(date -d "${t_str}" +${time_format})
+
+    if [ "${interval}" == "month" ]; then
+        arg_end_day=$(date -d "${t_plus_one_month_str}" +${time_format})
+        echo "[INFO] going to execute flow: project:$project, flow: $flow, day range: [$t_str, $t_plus_one_month_str), day range unix_timestamp: [$t, $t_plus_one_month)"
+
+    elif [ "${interval}" == "day" ]; then
+        arg_end_day=$(date -d "$t_plus_one_day_str" +${time_format})
+        echo "[INFO] going to execute flow: project:$project, flow: $flow, day range: [$t_str, $t_plus_one_day_str), day range unix_timestamp: [$t, $t_plus_one_day)"
+
+    else
+        echo "[ERROR] interval is not valid, allowed values: day, month"
+        exit -1
+    fi
 
     echo "arg[start_day] = $arg_start_day"
     echo "arg[end_day] = $arg_end_day"
-    echo "arg[conf_name] = $arg_conf_name"
-    echo "arg[app_name] = $arg_app_name"
 
     response=$(curl --get -d "session.id=$sessionid" -d "ajax=executeFlow" -d "project=$project" -d "flow=$flow" \
-        -d "flowOverride[start_day]=$arg_start_day" -d "flowOverride[end_day]=$arg_end_day" \
-        -d "flowOverride[conf_name]=$arg_conf_name" -d "flowOverride[app_name]=$arg_app_name" \
+        -d "flowOverride[start_day]=${arg_start_day}" -d "flowOverride[end_day]=${arg_end_day}" \
         "$azkaban_url/executor" 2>/dev/null)
 
     if [ $? != 0 ]; then
@@ -73,7 +85,14 @@ while [ $t -lt $end_day ] ; do
     if [ -z "$error" ]; then
         ## error is empty
         echo "[INFO] finished!"
-        t=$t_plus_one_day
+        if [ "${interval}" == "month" ]; then
+            t=$t_plus_one_month
+        elif [ "${interval}" == "day" ]; then
+            t=$t_plus_one_day
+        else
+            echo "[ERROR] interval is not valid, allowed values: day, month"
+            exit -1
+        fi
 
     else
         ## Error submitting flow <XXX>. Flow <XXX> is already running. Skipping execution.",
